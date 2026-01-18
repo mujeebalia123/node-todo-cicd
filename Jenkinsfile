@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script{
                    dockerCompose()
-                   echo 'code deploy hogaya FEEL FREE BRO' 
+                   echo 'code deploy hogaya' 
                 }
                 
                 // kubectl / docker run commands yahan aayenge
