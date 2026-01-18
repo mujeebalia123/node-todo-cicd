@@ -1,39 +1,57 @@
+@Library("shared") _
 pipeline {
-    agent { label "dev-server"}
-    
+    agent { label "vinod" }
+
     stages {
-        
-        stage("code"){
+        stage("hello")
+        {
             steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
-            }
-        }
-        stage("build and test"){
-            steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
-            }
-        }
-        stage("scan image"){
-            steps{
-                echo 'image scanning ho gayi'
-            }
-        }
-        stage("push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
+                script{
+                    hello()
                 }
             }
         }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+        stage("Code") {
+            steps {
+                script{
+                clone("https://github.com/mujeebalia123/node-todo-cicd.git","master")
+                }
+            }
+        }
+
+        stage("Build and Test") {
+            steps {
+                script{
+                dockerBuild("node-app","latest","mujeebshaikh")  
+            }
+                
+            }
+            
+        }
+
+        stage("Scan Image") {
+            steps {
+                echo 'image scanning hogayi'
+                // yahan trivy / snyk add kar sakte ho
+            }
+        }
+
+        stage("Push") {
+            steps {
+              script{
+                  dockerPush("node-app","latest","mujeebshaikh")
+              }
+            }
+        }
+
+        stage("Deploy") {
+            steps {
+                script{
+                   dockerCompose()
+                   echo 'code deploy hogaya' 
+                }
+                
+                // kubectl / docker run commands yahan aayenge
             }
         }
     }
