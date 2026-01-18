@@ -47,7 +47,7 @@ pipeline {
         stage("Deploy") {
             steps {
                 script{
-                   dockerCompose()
+                  sh "docker compose down && docker compose up -d"
                    echo 'code deploy hogaya' 
                 }
                 
