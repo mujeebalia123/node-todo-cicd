@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script{
                   sh "docker compose down && docker compose up -d"
-                   echo 'code deploy hogaya' 
+                   echo 'code deploy hogaya bhaiyya' 
                 }
                 
                 // kubectl / docker run commands yahan aayenge
